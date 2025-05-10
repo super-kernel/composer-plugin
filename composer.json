@@ -1,0 +1,37 @@
+{
+    "name": "super-kernel/composer-plugin",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "scripts": {
+        "dev": "@php -v"
+    },
+    "autoload": {
+        "psr-4": {
+            "SuperKernel\\ComposerPlugin\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "wheakerd",
+            "email": "wheakerd@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.4",
+        "composer-plugin-api": ">=2.0",
+        "composer-runtime-api": ">=2.1",
+        "super-kernel/contract": "^1.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.8"
+    },
+    "extra": {
+        "allow-plugins": {
+            "super-kernel/composer-plugin": true
+        },
+        "class": "SuperKernel\\ComposerPlugin\\SuperKernelPlugin"
+    },
+    "repositories": {
+    }
+}
