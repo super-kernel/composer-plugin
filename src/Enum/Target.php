@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SuperKernel\ComposerPlugin\Support;
+namespace SuperKernel\ComposerPlugin\Enum;
 
 use Composer\Util\Filesystem;
 use FilesystemIterator;

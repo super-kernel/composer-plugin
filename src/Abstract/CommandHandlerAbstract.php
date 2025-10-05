@@ -16,13 +16,17 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Class_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -34,9 +38,9 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use SuperKernel\ComposerPlugin\Contract\CommandHandlerInterface;
+use SuperKernel\ComposerPlugin\Enum\Target;
 use SuperKernel\ComposerPlugin\Generator\PackageGenerator;
 use SuperKernel\ComposerPlugin\Generator\ProjectFileGenerator;
-use SuperKernel\ComposerPlugin\Support\Target;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,6 +50,7 @@ use function array_values;
 use function basename;
 use function count;
 use function dirname;
+use function file_put_contents;
 use function iterator_to_array;
 
 abstract class CommandHandlerAbstract implements CommandHandlerInterface
@@ -121,7 +126,12 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 		$iterable = $projectFileGenerator->generate($this->output);
 
 		foreach ($iterable as $annotations) {
-			$this->annotations = array_merge_recursive($this->annotations, $annotations);
+			// TODO:合并同 key 元素，并对第二维进行去重
+			$annotationsArray = array_merge_recursive($this->annotations, $annotations);
+			foreach ($annotationsArray as &$annotation) {
+				$annotation = array_values(array_unique($annotation));
+			}
+			$this->annotations = $annotationsArray;
 
 			$progress->advance();
 		}
@@ -169,7 +179,6 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 			),
 		);
 
-
 		// 定义 define 全局变量
 		$arrayItems = [];
 
@@ -178,7 +187,7 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 			$subArrayItems = [];
 			foreach ($annotation as $item) {
 				$subArrayItems[] = new ArrayItem(
-					new ClassConstFetch(new Name($item), 'class'), // 值
+					new ClassConstFetch(new Name('\\' . $item), 'class'), // 值
 				);
 			}
 			// 使用原始键值作为每个子数组的键
@@ -247,9 +256,39 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 			),
 		);
 
+		// 添加框架运行逻辑
+		$stmts[] = new Stmt\Expression(
+			new MethodCall(
+				new MethodCall(
+					new New_(
+						new Stmt\Class_(
+							null,
+							[
+								'extends' => new Name('\SuperKernel\Di\Container'),
+								'stmts'   => [],
+							],
+						),
+					),
+					new Identifier('get'),
+					[
+						new Arg(
+							new ClassConstFetch(
+								new Name('\SuperKernel\Contract\ApplicationInterface'),
+								'class',
+							),
+						),
+					],
+				),
+				new Identifier('run'),
+			),
+		);
+
 		// 将 AST 语法转换成 PHP code
 		$printer        = new Standard();
 		$this->pharStub = $printer->prettyPrintFile($stmts);
+
+		// 写入引导文件
+		file_put_contents(Target::RUNTIME_DIR->get() . 'bin.php', $this->pharStub);
 	}
 
 	final protected function buildPharFile(): void
@@ -283,7 +322,7 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 		foreach ($iterator as $file) {
 			/** @var SplFileInfo $file */
 			$realPath  = $file->getRealPath();
-			$localPath = str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $realPath);
+			$localPath = ltrim(substr($realPath, strlen($sourceDir)), '/');
 
 			$phar->addFile($realPath, $localPath);
 			$progress->advance();

@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace SuperKernel\ComposerPlugin\Command;
 
-use Composer\Composer;
 use SuperKernel\ComposerPlugin\Abstract\CommandHandlerAbstract;
 use SuperKernel\ComposerPlugin\Contract\CommandHandlerInterface;
-use SuperKernel\ComposerPlugin\Support\Target;
+use SuperKernel\ComposerPlugin\Enum\Target;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

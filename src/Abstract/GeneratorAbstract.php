@@ -36,9 +36,6 @@ abstract class GeneratorAbstract
 		$parser  = new ParserFactory()->createForHostVersion();
 		$printer = new Standard();
 
-		// 使用自定义的 NodeVisitor 来提取注解信息
-		$extractor = new AnnotationExtractor();
-
 		/* @var SplFileInfo $file */
 		foreach ($this->getIterator() as $file) {
 			$targetFile = $this->getTargetDir() . str_replace($this->getSourcePath(), '', $file->getRealPath());
@@ -58,6 +55,8 @@ abstract class GeneratorAbstract
 					$ast = $parser->parse($code);
 
 					$traverser = new NodeTraverser();
+					// 使用自定义的 NodeVisitor 来提取注解信息
+					$extractor = new AnnotationExtractor();
 					$traverser->addVisitor($extractor);
 					$traverser->addVisitor(new class extends NodeVisitorAbstract {
 						public function enterNode(Node $node): void

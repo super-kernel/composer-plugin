@@ -11,7 +11,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use SuperKernel\ComposerPlugin\Abstract\GeneratorAbstract;
-use SuperKernel\ComposerPlugin\Support\Target;
+use SuperKernel\ComposerPlugin\Enum\Target;
 use function count;
 use function iterator_to_array;
 

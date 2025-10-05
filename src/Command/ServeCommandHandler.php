@@ -5,7 +5,7 @@ namespace SuperKernel\ComposerPlugin\Command;
 
 use SuperKernel\ComposerPlugin\Abstract\CommandHandlerAbstract;
 use SuperKernel\ComposerPlugin\Contract\CommandHandlerInterface;
-use SuperKernel\ComposerPlugin\Support\Target;
+use SuperKernel\ComposerPlugin\Enum\Target;
 
 final class ServeCommandHandler extends CommandHandlerAbstract implements CommandHandlerInterface
 {
@@ -24,11 +24,11 @@ final class ServeCommandHandler extends CommandHandlerAbstract implements Comman
 
 		parent::generatePharStub();
 
-		$this->output->writeln('<info>Packaging into phar...</info>');
+//		$this->output->writeln('<info>Packaging into phar...</info>');
 
-		parent::buildPharFile();
-
-		$this->output->writeln('<info>The startup entry file has been generated.</info>');
+//		parent::buildPharFile();
+//
+//		$this->output->writeln('<info>The startup entry file has been generated.</info>');
 	}
 
 	/**

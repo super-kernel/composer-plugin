@@ -66,6 +66,10 @@ final class AnnotationExtractor extends NodeVisitorAbstract
 
 	public function hasAnnotation(): bool
 	{
+		if (!isset($this->namespace)) {
+			return false;
+		}
+
 		return $this->hasAnnotation;
 	}
 

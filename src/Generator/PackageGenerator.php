@@ -7,7 +7,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SuperKernel\ComposerPlugin\Abstract\GeneratorAbstract;
-use SuperKernel\ComposerPlugin\Support\Target;
+use SuperKernel\ComposerPlugin\Enum\Target;
 
 final class PackageGenerator extends GeneratorAbstract
 {
