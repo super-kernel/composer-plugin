@@ -137,7 +137,6 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 		}
 
 		$progress->finish();
-
 		$this->output->writeln('');
 	}
 

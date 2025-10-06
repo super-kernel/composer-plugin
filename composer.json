@@ -1,24 +1,17 @@
 {
     "name": "super-kernel/composer-plugin",
     "type": "composer-plugin",
-    "description": "The Composer plugin for super kernel framework.",
+    "description": "The composer-plugin for super kernel framework.",
     "license": "MIT",
-    "version": "1.0.0",
     "scripts": {
         "dev": "@composer skernel dev",
         "build": "@composer skernel dev"
     },
     "extra": {
         "class": "SuperKernel\\ComposerPlugin\\ComposerPlugin",
-        "plugin-optional": true
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "process-timeout": 0,
-        "sort-packages": true
+        "plugin-optional": false
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "SuperKernel\\ComposerPlugin\\": "src/"

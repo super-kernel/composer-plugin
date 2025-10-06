@@ -38,6 +38,11 @@ abstract class GeneratorAbstract
 
 		/* @var SplFileInfo $file */
 		foreach ($this->getIterator() as $file) {
+
+			if ($file->isDir()) {
+				continue;
+			}
+
 			$targetFile = $this->getTargetDir() . str_replace($this->getSourcePath(), '', $file->getRealPath());
 			$targetDir  = dirname($targetFile);
 
