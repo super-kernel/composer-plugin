@@ -196,18 +196,7 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 			);
 		}
 
-		// 创建 `const` 常量定义
-		$constStmt = new ClassConst(
-			[
-				new Const_(
-					'ANNOTATIONS', // 常量名称
-					new Array_($arrayItems), // 常量值：二维数组
-				),
-			],
-		);
-
-		// 创建根节点并将语句添加到其中
-		$stmts[] = $constStmt;
+		$attributes = new Array_($arrayItems);
 
 		// 构建 spl_autoload_register
 		$closure = new Closure(
@@ -260,13 +249,10 @@ abstract class CommandHandlerAbstract implements CommandHandlerInterface
 			new MethodCall(
 				new MethodCall(
 					new New_(
-						new Stmt\Class_(
-							null,
-							[
-								'extends' => new Name('\SuperKernel\Di\Container'),
-								'stmts'   => [],
-							],
-						),
+						new Name('\SuperKernel\Di\Container'),
+						[
+							new Arg($attributes),
+						],
 					),
 					new Identifier('get'),
 					[
