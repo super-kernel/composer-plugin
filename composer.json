@@ -8,7 +8,7 @@
         "build": "@composer skernel dev"
     },
     "extra": {
-        "class": "SuperKernel\\ComposerPlugin\\ComposerPlugin",
+        "class": "SuperKernel\\ComposerPlugin\\Plugin",
         "plugin-optional": false
     },
     "minimum-stability": "stable",
@@ -20,6 +20,7 @@
     "require": {
         "composer-plugin-api": "^2.6",
         "composer/composer": "^2.8",
-        "nikic/php-parser": "^5.6"
+        "nikic/php-parser": "^5.6",
+        "super-kernel/di": "*"
     }
 }

@@ -9,7 +9,7 @@ use Composer\Plugin\Capability\CommandProvider as CapabilityCommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
 
-final class ComposerPlugin implements PluginInterface, Capable
+final class Plugin implements PluginInterface, Capable
 {
 	/**
 	 * @param Composer    $composer
